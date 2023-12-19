@@ -17,7 +17,7 @@ public class Intro extends AppCompatActivity {
             @Override
             public void run() {
                 // Start the main activity after the intro duration
-                Intent mainIntent = new Intent(Intro.this, MainActivity.class);
+                Intent mainIntent = new Intent(Intro.this, Home.class);
                 startActivity(mainIntent);
                 finish();
             }

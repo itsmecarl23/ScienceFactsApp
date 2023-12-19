@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#242526"
+    android:textAlignment="center"
+    tools:context=".Home">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="243dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="189dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginBottom="299dp"
+        android:text="Discover more science facts!"
+        android:textAlignment="center"
+        android:textColor="#00BCD4"
+        android:textSize="48sp"
+        tools:layout_editor_absoluteX="123dp"
+        tools:layout_editor_absoluteY="126dp" />
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="164dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="119dp"
+        android:layout_marginTop="532dp"
+        android:layout_marginEnd="127dp"
+        android:layout_marginBottom="144dp"
+        android:text="Get Started"
+        app:backgroundTint="#00BCD4" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="288dp"
+        android:layout_height="102dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="86dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="543dp"
+        android:text="Welcome to Scince Fact App"
+        android:textAlignment="center"
+        android:textColor="#00BCD4"
+        android:textColorHint="#00BCD4"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+</RelativeLayout>
