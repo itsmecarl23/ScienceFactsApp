@@ -1,15 +1,28 @@
 package com.example.sciencefacts;
 
+import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.ImageView;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.util.Calendar;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,12 +54,12 @@ public class MainActivity extends AppCompatActivity {
             "Bananas are berries, but strawberries aren't.",
             "The Hubble Space Telescope can see about 10 billion light-years away.",
             "The first computer programmer was Ada Lovelace, who wrote the first algorithm in the 1840s."
-
     };
+
     private final int[] scienceFactImages = {
-         R.drawable.earth,
-         R.drawable.owl,
-         R.drawable.speedoflight,
+            R.drawable.earth,
+            R.drawable.owl,
+            R.drawable.speedoflight,
             R.drawable.honey,
             R.drawable.brain,
             R.drawable.rainforest,
@@ -70,40 +83,92 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.banana,
             R.drawable.hubblespace,
             R.drawable.firstprogrammer
-
     };
 
     private TextView factTextView;
-
-    private Button generateButton;
-
     private ImageView factImageView;
+
+    private Handler handler;
+
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String FACT_OF_THE_DAY_KEY = "factOfTheDay";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        generateButton = findViewById(R.id.generateButton);
         factTextView = findViewById(R.id.factTextView);
         factImageView = findViewById(R.id.factImageView);
 
+        handler = new Handler();
 
-        generateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        // Set up a daily fact update at midnight
+        scheduleDailyFactUpdate();
 
-              displayRandomFact();
-            }
-        });
+        // Display the initial or last displayed fact of the day
+        displayStoredFactOfTheDay();
     }
-    private void displayRandomFact(){
+
+    private void scheduleDailyFactUpdate() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Display a new fact when the handler runs
+                displayRandomFactOfTheDay();
+
+                // Schedule the next update for the next day at midnight
+                scheduleDailyFactUpdate();
+            }
+        }, getTimeUntilMidnight());
+    }
+
+    private long getTimeUntilMidnight() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 24);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        long currentTime = System.currentTimeMillis();
+        long midnightTime = calendar.getTimeInMillis();
+
+        // Calculate the time difference until midnight
+        return midnightTime - currentTime;
+    }
+
+    private void displayRandomFactOfTheDay() {
         int randomIndex = new Random().nextInt(scienceFacts.length);
 
         factTextView.setText(scienceFacts[randomIndex]);
-
         factImageView.setImageResource(scienceFactImages[randomIndex]);
+
+        // Store the fact of the day
+        saveFactOfTheDay(randomIndex);
     }
-    public void onBackPressed(){
+
+    private void displayStoredFactOfTheDay() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        int factOfTheDayIndex = settings.getInt(FACT_OF_THE_DAY_KEY, -1);
+
+        if (factOfTheDayIndex != -1) {
+            factTextView.setText(scienceFacts[factOfTheDayIndex]);
+            factImageView.setImageResource(scienceFactImages[factOfTheDayIndex]);
+        } else {
+            // If no fact of the day is found, display a random fact of the day
+            displayRandomFactOfTheDay();
+        }
+    }
+
+    private void saveFactOfTheDay(int factIndex) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(FACT_OF_THE_DAY_KEY, factIndex);
+        editor.apply();
+    }
+
+    @Override
+    public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to exit?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -115,22 +180,19 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-
+                // Do nothing or handle the "No" button action
             }
         });
 
         builder.show();
     }
 
-    public void shareApp(View view){
+    public void shareApp(View view) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT,"Check out this app!");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Check out this app!");
         shareIntent.putExtra(Intent.EXTRA_TEXT, "I found this amazing app. You should try it!\nwww.google.com");
 
         startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
-
-
-
 }
