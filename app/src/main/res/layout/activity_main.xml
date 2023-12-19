@@ -29,9 +29,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="34dp"
-        android:layout_marginEnd="33dp"
-        android:layout_marginBottom="131dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="171dp"
         android:background="#0000BCD4"
         android:fontFamily="sans-serif"
         android:textAlignment="center"
@@ -56,21 +56,20 @@
         android:textSize="34sp"
         android:textStyle="italic" />
 
-    <TextView
-        android:id="@+id/txtviewscotd"
-        android:layout_width="224dp"
-        android:layout_height="34dp"
+    <Button
+        android:id="@+id/generateButton"
+        android:layout_width="149dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="91dp"
-        android:layout_marginTop="430dp"
-        android:layout_marginEnd="96dp"
-        android:layout_marginBottom="267dp"
-        android:text="Science fact of the day"
-        android:textColor="#FBFAFA"
-        android:textSize="20sp" />
+        android:layout_marginStart="129dp"
+        android:layout_marginTop="602dp"
+        android:layout_marginEnd="133dp"
+        android:layout_marginBottom="73dp"
+        android:text="Next"
+        app:backgroundTint="#00BCD4" />
 
 
 </RelativeLayout>
