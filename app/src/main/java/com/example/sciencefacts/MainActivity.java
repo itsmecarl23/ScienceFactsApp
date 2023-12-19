@@ -1,26 +1,17 @@
 package com.example.sciencefacts;
 
-import android.Manifest;
-import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.util.Calendar;
 import java.util.Random;
@@ -92,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String FACT_OF_THE_DAY_KEY = "factOfTheDay";
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         int factOfTheDayIndex = settings.getInt(FACT_OF_THE_DAY_KEY, -1);
 
+        Log.d(TAG, "Retrieved fact index: " + factOfTheDayIndex);
+
         if (factOfTheDayIndex != -1) {
             factTextView.setText(scienceFacts[factOfTheDayIndex]);
             factImageView.setImageResource(scienceFactImages[factOfTheDayIndex]);
@@ -165,23 +159,17 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(FACT_OF_THE_DAY_KEY, factIndex);
         editor.apply();
+
+        Log.d(TAG, "Saved fact index: " + factIndex);
     }
 
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to exit?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                // Do nothing or handle the "No" button action
-            }
+        builder.setPositiveButton("Yes", (dialogInterface, which) -> finish());
+        builder.setNegativeButton("No", (dialogInterface, which) -> {
+            // Do nothing or handle the "No" button action
         });
 
         builder.show();
